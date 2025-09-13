@@ -44,6 +44,8 @@ const SearchInterface = () => {
       results = results.filter(item => item.type === 'image' || item.type === 'video' || item.type === 'folder')
     } else if (activeTab === 'People') {
       results = results.filter(item => item.type === 'person')
+    } else if (activeTab === 'Chats') {
+      results = [] // No chat data currently available
     } else if (activeTab === 'All') {
       // Apply toggle filters for All tab
       if (!filters.Files) {
@@ -76,7 +78,8 @@ const SearchInterface = () => {
     return {
       All: allFilteredResults.length,
       Files: searchResults.filter(item => item.type !== 'person').length,
-      People: searchResults.filter(item => item.type === 'person').length
+      People: searchResults.filter(item => item.type === 'person').length,
+      Chats: 0 // No chat data in current dataset
     }
   }
 
@@ -199,7 +202,7 @@ const SearchInterface = () => {
           {/* Tabs and Settings */}
           <div className="search-tabs">
             <div className="tabs">
-              {['All', 'Files', 'People'].map((tab) => {
+              {['All', 'Files', 'People', 'Chats'].map((tab) => {
                 const counts = getTabCounts()
                 const count = counts[tab as keyof typeof counts]
                 return (
@@ -210,7 +213,8 @@ const SearchInterface = () => {
                   >
                     {tab === 'Files' && <BsFileEarmark className="tab-icon" />}
                     {tab === 'People' && <BsPerson className="tab-icon" />}
-                    {tab} {count > 0 && <span className="count">{count}</span>}
+                    {tab === 'Chats' && <BsChat className="tab-icon" />}
+                    {tab} <span className="count">{count}</span>
                   </button>
                 )
               })}
@@ -253,15 +257,14 @@ const SearchInterface = () => {
                       <span className="slider"></span>
                     </label>
                   </div>
-                  <div className="filter-item disabled">
+                  <div className="filter-item">
                     <BsChat className="filter-icon" />
                     <span>Chats</span>
-                    <label className="toggle disabled">
+                    <label className="toggle">
                       <input
                         type="checkbox"
                         checked={filters.Chats}
                         onChange={() => toggleFilter('Chats')}
-                        disabled
                       />
                       <span className="slider"></span>
                     </label>
@@ -287,9 +290,16 @@ const SearchInterface = () => {
           {/* Search Results */}
           <div className="search-results-container">
             {isSearching ? (
-              <div className="loading-container">
-                <div className="loading-spinner"></div>
-                <div className="loading-text">Searching...</div>
+              <div className="skeleton-loading">
+                {Array.from({ length: 6 }).map((_, index) => (
+                  <div key={index} className="skeleton-item">
+                    <div className="skeleton-avatar"></div>
+                    <div className="skeleton-content">
+                      <div className="skeleton-title"></div>
+                      <div className="skeleton-subtitle"></div>
+                    </div>
+                  </div>
+                ))}
               </div>
             ) : (
               <div className="search-results">

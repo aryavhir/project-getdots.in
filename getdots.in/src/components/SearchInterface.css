@@ -38,6 +38,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -189,6 +190,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -316,6 +318,7 @@
     opacity: 0;
     transform: translateY(-8px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -392,11 +395,11 @@
   border-radius: 50%;
 }
 
-input:checked + .slider {
+input:checked+.slider {
   background-color: #1f2937;
 }
 
-input:checked + .slider:before {
+input:checked+.slider:before {
   transform: translateX(14px);
 }
 
@@ -405,38 +408,59 @@ input:checked + .slider:before {
   background-color: #f3f4f6;
 }
 
-.toggle.disabled input:checked + .slider {
+.toggle.disabled input:checked+.slider {
   background-color: #d1d5db;
 }
 
-/* Loading Animation */
-.loading-container {
+/* Skeleton Loading */
+.skeleton-loading {
+  padding: 8px 0;
+}
+
+.skeleton-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 24px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.skeleton-avatar {
+  width: 48px;
+  height: 48px;
+  background: #e5e7eb;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.skeleton-content {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 60px 20px;
-  gap: 16px;
+  gap: 8px;
 }
 
-.loading-spinner {
-  width: 32px;
-  height: 32px;
-  border: 3px solid #f3f4f6;
-  border-top: 3px solid #6b7280;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
+.skeleton-title {
+  height: 16px;
+  background: #e5e7eb;
+  border-radius: 4px;
+  width: 70%;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+.skeleton-subtitle {
+  height: 14px;
+  background: #f3f4f6;
+  border-radius: 4px;
+  width: 50%;
 }
 
-.loading-text {
-  color: #6b7280;
-  font-size: 14px;
-  font-weight: 500;
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
 }
 
 /* Text Highlighting */
@@ -547,7 +571,6 @@ input:checked + .slider:before {
   font-weight: 600;
   color: #1f2937;
   margin: 0 0 4px 0;
-  display: flex;
   align-items: center;
   gap: 8px;
 }
@@ -570,15 +593,15 @@ input:checked + .slider:before {
   .search-interface {
     padding: 20px;
   }
-  
+
   .search-container {
     border-radius: 16px;
   }
-  
+
   .tab {
     margin-right: 16px;
   }
-  
+
   .filter-dropdown {
     width: 140px;
   }
