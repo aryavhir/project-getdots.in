@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
-import { IoSearch, IoSettings } from 'react-icons/io5'
+import { IoSearch } from 'react-icons/io5'
 import { BsFileEarmark, BsPerson, BsFolder, BsPlay, BsChat, BsList } from 'react-icons/bs'
+import { HiOutlineExternalLink, HiOutlineLink } from 'react-icons/hi'
 import searchData from '../data/searchData.json'
 import './SearchInterface.css'
 
@@ -247,7 +248,7 @@ const SearchInterface = () => {
                   setShowFilters(!showFilters)
                 }}
               >
-                <IoSettings />
+                <img src="/setting.jpg" alt="Settings" width="16" height="16" />
               </button>
               
               {showFilters && (
@@ -322,14 +323,21 @@ const SearchInterface = () => {
               </div>
             ) : (
               <div className="search-results">
-                {getFilteredResults().map(result => (
-                  <SearchResultItem 
-                    key={result.id} 
-                    result={result} 
-                    searchQuery={searchQuery}
-                    highlightText={highlightText}
-                  />
-                ))}
+                {getFilteredResults().length === 0 ? (
+                  <div className="no-results">
+                    <div className="no-results-text">No results found</div>
+                    <div className="no-results-subtitle">Try adjusting your search or filters</div>
+                  </div>
+                ) : (
+                  getFilteredResults().map(result => (
+                    <SearchResultItem 
+                      key={result.id} 
+                      result={result} 
+                      searchQuery={searchQuery}
+                      highlightText={highlightText}
+                    />
+                  ))
+                )}
               </div>
             )}
           </div>
@@ -379,11 +387,20 @@ const SearchResultItem = ({ result, searchQuery, highlightText }: {
               <div className="link-copied">✓ Link copied!</div>
             ) : (
               <>
-                <button className="action-btn copy-btn" onClick={handleCopyLink}>
-                  📋
+                <button 
+                  className="action-btn copy-btn" 
+                  onClick={handleCopyLink}
+                  title="Copy link"
+                >
+                  <HiOutlineLink size={16} />
                 </button>
-                <button className="action-btn new-tab-btn" onClick={handleNewTab}>
-                  🔗 New Tab
+                <button 
+                  className="action-btn new-tab-btn" 
+                  onClick={handleNewTab}
+                  title="New Tab"
+                >
+                  <HiOutlineExternalLink size={16} />
+                  <span>New Tab</span>
                 </button>
               </>
             )}
@@ -415,11 +432,20 @@ const SearchResultItem = ({ result, searchQuery, highlightText }: {
               <div className="link-copied">✓ Link copied!</div>
             ) : (
               <>
-                <button className="action-btn copy-btn" onClick={handleCopyLink}>
-                  📋
+                <button 
+                  className="action-btn copy-btn" 
+                  onClick={handleCopyLink}
+                  title="Copy link"
+                >
+                  <HiOutlineLink size={16} />
                 </button>
-                <button className="action-btn new-tab-btn" onClick={handleNewTab}>
-                  🔗 New Tab
+                <button 
+                  className="action-btn new-tab-btn" 
+                  onClick={handleNewTab}
+                  title="New Tab"
+                >
+                  <HiOutlineExternalLink size={16} />
+                  <span>New Tab</span>
                 </button>
               </>
             )}
@@ -449,11 +475,20 @@ const SearchResultItem = ({ result, searchQuery, highlightText }: {
               <div className="link-copied">✓ Link copied!</div>
             ) : (
               <>
-                <button className="action-btn copy-btn" onClick={handleCopyLink}>
-                  📋
+                <button 
+                  className="action-btn copy-btn" 
+                  onClick={handleCopyLink}
+                  title="Copy link"
+                >
+                  <HiOutlineLink size={16} />
                 </button>
-                <button className="action-btn new-tab-btn" onClick={handleNewTab}>
-                  🔗 New Tab
+                <button 
+                  className="action-btn new-tab-btn" 
+                  onClick={handleNewTab}
+                  title="New Tab"
+                >
+                  <HiOutlineExternalLink size={16} />
+                  <span>New Tab</span>
                 </button>
               </>
             )}
@@ -483,11 +518,20 @@ const SearchResultItem = ({ result, searchQuery, highlightText }: {
               <div className="link-copied">✓ Link copied!</div>
             ) : (
               <>
-                <button className="action-btn copy-btn" onClick={handleCopyLink}>
-                  📋
+                <button 
+                  className="action-btn copy-btn" 
+                  onClick={handleCopyLink}
+                  title="Copy link"
+                >
+                  <HiOutlineLink size={16} />
                 </button>
-                <button className="action-btn new-tab-btn" onClick={handleNewTab}>
-                  🔗 New Tab
+                <button 
+                  className="action-btn new-tab-btn" 
+                  onClick={handleNewTab}
+                  title="New Tab"
+                >
+                  <HiOutlineExternalLink size={16} />
+                  <span>New Tab</span>
                 </button>
               </>
             )}

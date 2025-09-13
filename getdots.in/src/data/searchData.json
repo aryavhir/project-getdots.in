@@ -3,13 +3,13 @@
     {
       "id": "1",
       "name": "Caroline Dribsson",
-      "avatar": "https://images.unsplash.com/photo-1494790108755-2616b612b47c?w=64&h=64&fit=crop&crop=face",
+      "avatar": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=64&h=64&fit=crop&crop=face",
       "status": "unactivated",
       "statusColor": "red",
       "type": "person"
     },
     {
-      "id": "2", 
+      "id": "2",
       "name": "Adam Cadribean",
       "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=64&h=64&fit=crop&crop=face",
       "status": "Active 1w ago",
@@ -18,10 +18,10 @@
     },
     {
       "id": "3",
-      "name": "Margareth Cendribassen", 
+      "name": "Margareth Cendribassen",
       "avatar": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=64&h=64&fit=crop&crop=face",
       "status": "Active 1w ago",
-      "statusColor": "yellow", 
+      "statusColor": "yellow",
       "type": "person"
     },
     {
@@ -34,7 +34,7 @@
     },
     {
       "id": "5",
-      "name": "Kristinge Karand", 
+      "name": "Kristinge Karand",
       "avatar": "https://images.unsplash.com/photo-1544725176-7c40e5a71c5e?w=64&h=64&fit=crop&crop=face",
       "status": "Active 2d ago",
       "statusColor": "yellow",
@@ -50,7 +50,7 @@
       "type": "image"
     },
     {
-      "id": "7", 
+      "id": "7",
       "name": "dribbble_animation.avi",
       "location": "Videos",
       "lastEdited": "Added 1y ago",
@@ -58,7 +58,7 @@
     },
     {
       "id": "8",
-      "name": "crative_file_frandkies.jpg", 
+      "name": "crative_file_frandkies.jpg",
       "location": "Photos/Assets",
       "lastEdited": "Edited 12m ago",
       "type": "image"
@@ -66,7 +66,7 @@
     {
       "id": "9",
       "name": "files_krande_michelle.avi",
-      "location": "Videos", 
+      "location": "Videos",
       "lastEdited": "Added 12m ago",
       "type": "video"
     }
@@ -81,11 +81,11 @@
       "type": "folder"
     },
     {
-      "id": "11", 
+      "id": "11",
       "name": "Random Michal Folder",
       "fileCount": "12 Files",
       "location": "Photos",
-      "lastEdited": "Edited 12m ago", 
+      "lastEdited": "Edited 12m ago",
       "type": "folder"
     }
   ]

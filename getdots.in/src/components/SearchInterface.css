@@ -1,3 +1,8 @@
+/* Custom Cursor */
+* {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="%23999" fill-opacity="0.3" stroke="%23666" stroke-width="1" stroke-opacity="0.5"/></svg>') 12 12, auto;
+}
+
 /* Search Interface Styles */
 .search-interface {
   width: 100vw;
@@ -181,7 +186,6 @@
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
   overflow: hidden;
   animation: slideUp 0.3s ease;
-  max-height: calc(100vh - 300px);
   overflow-y: auto;
 }
 
@@ -223,7 +227,6 @@
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  border-radius: 20px;
   transition: all 0.2s ease;
   position: relative;
 }
@@ -231,6 +234,11 @@
 .tab:hover {
   color: #374151;
   background: #f9fafb;
+}
+
+.tab:focus {
+  outline: none;
+  box-shadow: none;
 }
 
 .tab.active {
@@ -275,8 +283,6 @@
 }
 
 .settings-button {
-  width: 32px;
-  height: 32px;
   border: none;
   background: transparent;
   color: #6b7280;
@@ -455,9 +461,12 @@ input:checked+.slider:before {
 }
 
 @keyframes pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0.6;
   }
@@ -468,7 +477,6 @@ input:checked+.slider:before {
   background: #fef3c7;
   color: #92400e;
   font-weight: 600;
-  padding: 1px 2px;
   border-radius: 2px;
 }
 
@@ -486,6 +494,7 @@ input:checked+.slider:before {
     opacity: 0;
     transform: translateX(10px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -662,4 +671,47 @@ input:checked+.slider:before {
   .filter-dropdown {
     width: 140px;
   }
+}
+
+/* No Results State */
+.no-results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.no-results-text {
+  font-size: 16px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 8px;
+}
+
+.no-results-subtitle {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+/* Action Button Updates */
+.action-btn {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+
+.copy-btn {
+  min-width: 40px !important;
+  padding: 8px !important;
+  border-radius: 50% !important;
+  background: #f3f4f6 !important;
+  border: 1px solid #d1d5db !important;
+  justify-content: center !important;
+}
+
+.settings-button:focus {
+  outline: none !important;
+  box-shadow: none !important;
 }
