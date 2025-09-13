@@ -69,7 +69,7 @@
 
 .compact-search-wrapper .search-icon {
   color: #9ca3af;
-  font-size: 20px;
+  font-size: 26px;
   margin-right: 16px;
   flex-shrink: 0;
 }
@@ -78,7 +78,7 @@
   flex: 1;
   border: none;
   outline: none;
-  font-size: 18px;
+  font-size: 24px;
   color: #374151;
   background: transparent;
   min-width: 0;
@@ -94,20 +94,17 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
   border-radius: 16px;
   padding: 8px 12px;
   margin-left: 16px;
   flex-shrink: 0;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .shortcut-key {
-  width: 24px;
-  height: 24px;
+  width: 32px;
+  height: 32px;
   background: #ffffff;
-  border: 1px solid #e5e7eb;
+  border: 2px solid #e5e7eb;
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -115,11 +112,11 @@
   font-size: 14px;
   font-weight: 600;
   color: #6b7280;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 3px 2px rgba(0, 0, 0, 0.05);
 }
 
 .shortcut-text {
-  font-size: 13px;
+  font-size: 16px;
   color: #6b7280;
   font-weight: 500;
 }
@@ -135,13 +132,13 @@
   display: flex;
   align-items: center;
   background: white;
-  border-radius: 50px 50px 0 0;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  border-radius: 20px 20px 0 0;
   padding: 20px 32px;
   transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   width: 100%;
   box-sizing: border-box;
   margin-bottom: 0;
+
   position: relative;
   z-index: 2;
 }
@@ -189,7 +186,7 @@
   width: 100%;
   background: white;
   border-radius: 0 0 24px 24px;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+  box-shadow: 0px 0px 32px 11px rgba(0, 0, 0, 0.17);
   overflow: hidden;
   animation: slideDown 0.3s ease;
   overflow-y: auto;
