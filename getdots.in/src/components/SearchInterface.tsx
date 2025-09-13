@@ -122,7 +122,7 @@ const SearchInterface = () => {
       setShowResults(false);
       setShowFilters(false);
       setIsClosing(false);
-    }, 600); // 0.6s to match CSS animation duration
+    }, 1200); // 1.2s to match CSS animation duration
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
