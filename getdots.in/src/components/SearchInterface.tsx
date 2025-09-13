@@ -221,7 +221,7 @@ const SearchInterface = () => {
               className="search-input"
             />
             <div className="quick-access">
-              <span className="shortcut-key">⌘</span>
+              <span className="shortcut-key">S</span>
               <span className="shortcut-text">quick access</span>
             </div>
           </div>
@@ -435,7 +435,7 @@ const SearchResultItem = ({
         {showActions && (
           <div className="result-actions">
             {linkCopied ? (
-              <div className="link-copied">✓ Link copied!</div>
+              <div className="link-copied" title="Link copied!">✓ Link copied!</div>
             ) : (
               <>
                 <button
@@ -483,7 +483,7 @@ const SearchResultItem = ({
         {showActions && (
           <div className="result-actions">
             {linkCopied ? (
-              <div className="link-copied">✓ Link copied!</div>
+              <div className="link-copied" title="Link copied!">✓ Link copied!</div>
             ) : (
               <>
                 <button
@@ -530,7 +530,7 @@ const SearchResultItem = ({
         {showActions && (
           <div className="result-actions">
             {linkCopied ? (
-              <div className="link-copied">✓ Link copied!</div>
+              <div className="link-copied" title="Link copied!">✓ Link copied!</div>
             ) : (
               <>
                 <button
@@ -577,7 +577,7 @@ const SearchResultItem = ({
         {showActions && (
           <div className="result-actions">
             {linkCopied ? (
-              <div className="link-copied">✓ Link copied!</div>
+              <div className="link-copied" title="Link copied!">✓ Link copied!</div>
             ) : (
               <>
                 <button
