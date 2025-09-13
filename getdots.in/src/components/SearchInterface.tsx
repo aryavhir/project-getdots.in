@@ -31,13 +31,24 @@ const SearchInterface = () => {
   const getFilteredResults = () => {
     let results = allResults
     
+    // Apply search query filter (always applied)
     if (searchQuery) {
       results = results.filter(item => 
         item.name.toLowerCase().includes(searchQuery.toLowerCase())
       )
     }
 
-    if (activeTab !== 'All') {
+    // Apply tab filter or toggle filters
+    if (activeTab === 'All') {
+      // On "All" tab: apply toggle filters
+      if (!filters.Files) {
+        results = results.filter(item => item.type !== 'image' && item.type !== 'video' && item.type !== 'folder')
+      }
+      if (!filters.People) {
+        results = results.filter(item => item.type !== 'person')
+      }
+    } else {
+      // On specific tabs: apply tab filter (ignore toggles)
       if (activeTab === 'Files') {
         results = results.filter(item => item.type === 'image' || item.type === 'video' || item.type === 'folder')
       } else if (activeTab === 'People') {
@@ -49,14 +60,28 @@ const SearchInterface = () => {
   }
 
   const getTabCounts = () => {
-    const filteredBySearch = searchQuery ? 
-      allResults.filter(item => item.name.toLowerCase().includes(searchQuery.toLowerCase())) : 
-      allResults
+    let results = allResults
+    
+    // Apply search query filter
+    if (searchQuery) {
+      results = results.filter(item => 
+        item.name.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    }
+
+    // Calculate "All" count with toggle filters (always applied for All count)
+    let allFilteredResults = results
+    if (!filters.Files) {
+      allFilteredResults = allFilteredResults.filter(item => item.type !== 'image' && item.type !== 'video' && item.type !== 'folder')
+    }
+    if (!filters.People) {
+      allFilteredResults = allFilteredResults.filter(item => item.type !== 'person')
+    }
     
     return {
-      All: filteredBySearch.length,
-      Files: filteredBySearch.filter(item => item.type !== 'person').length,
-      People: filteredBySearch.filter(item => item.type === 'person').length
+      All: allFilteredResults.length,
+      Files: results.filter(item => item.type !== 'person').length,
+      People: results.filter(item => item.type === 'person').length
     }
   }
 
@@ -138,16 +163,14 @@ const SearchInterface = () => {
                 <div className="filter-item disabled">
                   <BsChat className="filter-icon" />
                   <span>Chats</span>
-                  <div className={`toggle ${filters.Chats ? 'active' : ''}`}
-                       onClick={() => toggleFilter('Chats')}>
+                  <div className={`toggle ${filters.Chats ? 'active' : ''}`}>
                     <div className="toggle-thumb"></div>
                   </div>
                 </div>
                 <div className="filter-item disabled">
                   <BsList className="filter-icon" />
                   <span>Lists</span>
-                  <div className={`toggle ${filters.Lists ? 'active' : ''}`}
-                       onClick={() => toggleFilter('Lists')}>
+                  <div className={`toggle ${filters.Lists ? 'active' : ''}`}>
                     <div className="toggle-thumb"></div>
                   </div>
                 </div>
