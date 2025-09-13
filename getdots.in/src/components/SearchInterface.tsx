@@ -15,6 +15,7 @@ const SearchInterface = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [activeTab, setActiveTab] = useState('All')
   const [showFilters, setShowFilters] = useState(false)
+  const [isExpanded, setIsExpanded] = useState(false)
   const [filters, setFilters] = useState({
     Files: true,
     People: true,
@@ -87,6 +88,20 @@ const SearchInterface = () => {
 
   const clearSearch = () => {
     setSearchQuery('')
+    setIsExpanded(false)
+    setShowFilters(false)
+  }
+
+  const handleSearchFocus = () => {
+    setIsExpanded(true)
+  }
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setSearchQuery(value)
+    if (value && !isExpanded) {
+      setIsExpanded(true)
+    }
   }
 
   const toggleFilter = (filterName: string) => {
@@ -96,8 +111,34 @@ const SearchInterface = () => {
     }))
   }
 
+  if (!isExpanded) {
+    // Compact initial state
+    return (
+      <div className="search-interface compact">
+        <div className="compact-search-container">
+          <div className="compact-search-wrapper">
+            <IoSearch className="search-icon" />
+            <input
+              type="text"
+              placeholder="Searching is easier"
+              value={searchQuery}
+              onChange={handleSearchChange}
+              onFocus={handleSearchFocus}
+              className="search-input"
+            />
+            <div className="quick-access">
+              <span className="shortcut-key">⌘</span>
+              <span className="shortcut-text">quick access</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Expanded state - full interface
   return (
-    <div className="search-interface">
+    <div className="search-interface expanded">
       <div className="search-container">
         <div className="search-input-wrapper">
           <IoSearch className="search-icon" />
@@ -105,8 +146,9 @@ const SearchInterface = () => {
             type="text"
             placeholder="Search..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={handleSearchChange}
             className="search-input"
+            autoFocus
           />
           {searchQuery && (
             <button onClick={clearSearch} className="clear-button">
