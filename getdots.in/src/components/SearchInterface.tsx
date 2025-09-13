@@ -117,10 +117,23 @@ const SearchInterface = () => {
   }
 
   const toggleFilter = (filterName: string) => {
-    setFilters(prev => ({
-      ...prev,
-      [filterName]: !prev[filterName as keyof typeof prev]
-    }))
+    setFilters(prev => {
+      const newFilters = {
+        ...prev,
+        [filterName]: !prev[filterName as keyof typeof prev]
+      }
+      
+      // If we're turning off a filter and we're currently on that tab, switch to All
+      if (!newFilters[filterName as keyof typeof newFilters]) {
+        if ((filterName === 'Files' && activeTab === 'Files') ||
+            (filterName === 'People' && activeTab === 'People') ||
+            (filterName === 'Chats' && activeTab === 'Chats')) {
+          setActiveTab('All')
+        }
+      }
+      
+      return newFilters
+    })
   }
 
   const highlightText = (text: string, query: string) => {
@@ -202,7 +215,13 @@ const SearchInterface = () => {
           {/* Tabs and Settings */}
           <div className="search-tabs">
             <div className="tabs">
-              {['All', 'Files', 'People', 'Chats'].map((tab) => {
+              {['All', 'Files', 'People', 'Chats'].filter(tab => {
+                // Hide tabs when their corresponding filter is disabled
+                if (tab === 'Files' && !filters.Files) return false
+                if (tab === 'People' && !filters.People) return false
+                if (tab === 'Chats' && !filters.Chats) return false
+                return true
+              }).map((tab) => {
                 const counts = getTabCounts()
                 const count = counts[tab as keyof typeof counts]
                 return (
@@ -325,9 +344,27 @@ const SearchResultItem = ({ result, searchQuery, highlightText }: {
   searchQuery: string
   highlightText: (text: string, query: string) => React.ReactNode
 }) => {
+  const [showActions, setShowActions] = useState(false)
+  const [linkCopied, setLinkCopied] = useState(false)
+
+  const handleCopyLink = () => {
+    // Copy a mock link to clipboard
+    navigator.clipboard.writeText(`https://example.com/${result.id}`)
+    setLinkCopied(true)
+    setTimeout(() => setLinkCopied(false), 2000)
+  }
+
+  const handleNewTab = () => {
+    // Open in new tab (mock functionality)
+    window.open(`https://example.com/${result.id}`, '_blank')
+  }
   if (result.type === 'person') {
     return (
-      <div className="result-item person-item">
+      <div 
+        className="result-item person-item"
+        onMouseEnter={() => setShowActions(true)}
+        onMouseLeave={() => setShowActions(false)}
+      >
         <div className="avatar-container">
           <img src={result.avatar} alt={result.name} className="avatar" />
           <div className={`status-dot ${result.statusColor}`}></div>
@@ -336,13 +373,33 @@ const SearchResultItem = ({ result, searchQuery, highlightText }: {
           <h3 className="result-name">{highlightText(result.name, searchQuery)}</h3>
           <p className="result-meta">{result.status}</p>
         </div>
+        {showActions && (
+          <div className="result-actions">
+            {linkCopied ? (
+              <div className="link-copied">✓ Link copied!</div>
+            ) : (
+              <>
+                <button className="action-btn copy-btn" onClick={handleCopyLink}>
+                  📋
+                </button>
+                <button className="action-btn new-tab-btn" onClick={handleNewTab}>
+                  🔗 New Tab
+                </button>
+              </>
+            )}
+          </div>
+        )}
       </div>
     )
   }
   
   if (result.type === 'folder') {
     return (
-      <div className="result-item folder-item">
+      <div 
+        className="result-item folder-item"
+        onMouseEnter={() => setShowActions(true)}
+        onMouseLeave={() => setShowActions(false)}
+      >
         <div className="result-icon">
           <BsFolder />
         </div>
@@ -352,13 +409,33 @@ const SearchResultItem = ({ result, searchQuery, highlightText }: {
           </h3>
           <p className="result-meta">in {result.location} • {result.lastEdited}</p>
         </div>
+        {showActions && (
+          <div className="result-actions">
+            {linkCopied ? (
+              <div className="link-copied">✓ Link copied!</div>
+            ) : (
+              <>
+                <button className="action-btn copy-btn" onClick={handleCopyLink}>
+                  📋
+                </button>
+                <button className="action-btn new-tab-btn" onClick={handleNewTab}>
+                  🔗 New Tab
+                </button>
+              </>
+            )}
+          </div>
+        )}
       </div>
     )
   }
   
   if (result.type === 'image') {
     return (
-      <div className="result-item file-item">
+      <div 
+        className="result-item file-item"
+        onMouseEnter={() => setShowActions(true)}
+        onMouseLeave={() => setShowActions(false)}
+      >
         <div className="result-icon image-icon">
           <BsFileEarmark />
         </div>
@@ -366,13 +443,33 @@ const SearchResultItem = ({ result, searchQuery, highlightText }: {
           <h3 className="result-name">{highlightText(result.name, searchQuery)}</h3>
           <p className="result-meta">in {result.location} • {result.lastEdited}</p>
         </div>
+        {showActions && (
+          <div className="result-actions">
+            {linkCopied ? (
+              <div className="link-copied">✓ Link copied!</div>
+            ) : (
+              <>
+                <button className="action-btn copy-btn" onClick={handleCopyLink}>
+                  📋
+                </button>
+                <button className="action-btn new-tab-btn" onClick={handleNewTab}>
+                  🔗 New Tab
+                </button>
+              </>
+            )}
+          </div>
+        )}
       </div>
     )
   }
   
   if (result.type === 'video') {
     return (
-      <div className="result-item file-item">
+      <div 
+        className="result-item file-item"
+        onMouseEnter={() => setShowActions(true)}
+        onMouseLeave={() => setShowActions(false)}
+      >
         <div className="result-icon video-icon">
           <BsPlay />
         </div>
@@ -380,6 +477,22 @@ const SearchResultItem = ({ result, searchQuery, highlightText }: {
           <h3 className="result-name">{highlightText(result.name, searchQuery)}</h3>
           <p className="result-meta">in {result.location} • {result.lastEdited}</p>
         </div>
+        {showActions && (
+          <div className="result-actions">
+            {linkCopied ? (
+              <div className="link-copied">✓ Link copied!</div>
+            ) : (
+              <>
+                <button className="action-btn copy-btn" onClick={handleCopyLink}>
+                  📋
+                </button>
+                <button className="action-btn new-tab-btn" onClick={handleNewTab}>
+                  🔗 New Tab
+                </button>
+              </>
+            )}
+          </div>
+        )}
       </div>
     )
   }

@@ -472,6 +472,63 @@ input:checked+.slider:before {
   border-radius: 2px;
 }
 
+/* Result Actions */
+.result-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  animation: fadeInActions 0.2s ease forwards;
+}
+
+@keyframes fadeInActions {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.action-btn {
+  padding: 6px 12px;
+  border: 1px solid #e5e7eb;
+  background: white;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  font-weight: 500;
+  color: #374151;
+}
+
+.action-btn:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+}
+
+.copy-btn {
+  min-width: 32px;
+  padding: 6px 8px;
+}
+
+.new-tab-btn {
+  color: #374151;
+}
+
+.link-copied {
+  background: #10b981;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  animation: fadeInActions 0.2s ease;
+}
+
 
 
 
