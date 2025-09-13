@@ -75,44 +75,31 @@
   transform: translateY(-2px);
 }
 
-/* Expanded state styling */
+/* Expanded state styling - keep same appearance, just change connection */
 .search-wrapper.expanded {
   border-radius: 20px 20px 0 0;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
   border-bottom: 1px solid #f3f4f6;
 }
 
-/* Search icon styling for both states */
-.search-wrapper.compact .search-icon {
+.search-wrapper.expanded:hover {
+  transform: none;
+}
+
+/* Search icon styling - identical for both states */
+.search-wrapper .search-icon {
   color: #9ca3af;
   font-size: 26px;
   margin-right: 16px;
   flex-shrink: 0;
 }
 
-.search-wrapper.expanded .search-icon {
-  color: #9ca3af;
-  font-size: 20px;
-  margin-right: 16px;
-  flex-shrink: 0;
-}
-
-/* Search input styling for both states */
-.search-wrapper.compact .search-input {
+/* Search input styling - identical for both states */
+.search-wrapper .search-input {
   flex: 1;
   border: none;
   outline: none;
   font-size: 24px;
-  color: #374151;
-  background: transparent;
-  min-width: 0;
-}
-
-.search-wrapper.expanded .search-input {
-  flex: 1;
-  border: none;
-  outline: none;
-  font-size: 18px;
   color: #374151;
   background: transparent;
   min-width: 0;
