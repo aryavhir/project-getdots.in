@@ -15,20 +15,25 @@
   overflow-x: hidden;
 }
 
-/* Compact State */
-.search-interface.compact {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 40px;
-}
-
-/* Expanded State */
-.search-interface.expanded {
+/* Search Interface - consistent layout, no justify-content switching */
+.search-interface {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 100px 40px 40px 40px;
+  justify-content: flex-start;
+  height: 100vh;
+  padding: 40px;
+}
+
+/* Search Container - animates position with transform */
+.search-container {
+  transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(40vh);
+}
+
+/* Expanded State - push search bar up halfway */
+.search-interface.expanded .search-container {
+  transform: translateY(20vh);
 }
 
 /* Search Container */
@@ -42,12 +47,10 @@
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(20px);
   }
 
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }
 
@@ -676,7 +679,12 @@ input:checked+.slider:before {
 /* Responsive */
 @media (max-width: 640px) {
   .search-interface {
-    padding: 20px;
+    padding-inline: 20px;
+    padding-bottom: 20px;
+  }
+  
+  .search-interface.expanded .search-container {
+    transform: translateY(24vh);
   }
 
   .search-container {
