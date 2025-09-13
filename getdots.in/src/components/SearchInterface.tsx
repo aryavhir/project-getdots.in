@@ -24,7 +24,9 @@ const SearchInterface = () => {
   const [showResults, setShowResults] = useState(false);
   const [activeTab, setActiveTab] = useState("All");
   const [showFilters, setShowFilters] = useState(false);
+  const [settingsClicked, setSettingsClicked] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
   const [filters, setFilters] = useState({
     Files: true,
     People: true,
@@ -33,6 +35,7 @@ const SearchInterface = () => {
   });
 
   const loadingTimeoutRef = useRef<number | null>(null);
+  const closingTimeoutRef = useRef<number | null>(null);
 
   const allResults = [
     ...searchData.people,
@@ -109,18 +112,36 @@ const SearchInterface = () => {
   };
 
   const clearSearch = () => {
-    // Clear any pending loading timeout
+    // Clear any pending timeouts
     if (loadingTimeoutRef.current) {
       clearTimeout(loadingTimeoutRef.current);
     }
-    setSearchQuery("");
-    setShowResults(false);
-    setShowFilters(false);
+    if (closingTimeoutRef.current) {
+      clearTimeout(closingTimeoutRef.current);
+    }
+    
+    // Start closing animation
+    setIsClosing(true);
     setIsSearching(false);
+    
+    // After animation completes, clear all states
+    closingTimeoutRef.current = setTimeout(() => {
+      setSearchQuery("");
+      setShowResults(false);
+      setShowFilters(false);
+      setIsClosing(false);
+    }, 600); // 0.6s to match CSS animation duration
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
+    
+    // Cancel closing animation if user starts typing
+    if (value.length > 0 && closingTimeoutRef.current) {
+      clearTimeout(closingTimeoutRef.current);
+      setIsClosing(false);
+    }
+    
     setSearchQuery(value);
 
     // Clear any existing loading timeout
@@ -197,11 +218,14 @@ const SearchInterface = () => {
     }
   }, [showFilters]);
 
-  // Cleanup loading timeout on unmount
+  // Cleanup timeouts on unmount
   useEffect(() => {
     return () => {
       if (loadingTimeoutRef.current) {
         clearTimeout(loadingTimeoutRef.current);
+      }
+      if (closingTimeoutRef.current) {
+        clearTimeout(closingTimeoutRef.current);
       }
     };
   }, []);
@@ -277,17 +301,19 @@ const SearchInterface = () => {
 
             <div className="settings-container">
               <button
-                className={`settings-button ${showFilters ? "active" : ""}`}
+                className={`settings-button ${showFilters ? "active" : ""} ${settingsClicked ? "clicked" : ""}`}
                 onClick={(e) => {
                   e.stopPropagation();
                   setShowFilters(!showFilters);
+                  setSettingsClicked(true);
+                  setTimeout(() => setSettingsClicked(false), 300);
                 }}
               >
                 <img
                   src="/setting.svg"
                   alt="Settings"
-                  width="30px"
-                  height="30px"
+                  width="16"
+                  height="16"
                 />
               </button>
 
@@ -351,7 +377,7 @@ const SearchInterface = () => {
           </div>
 
           {/* Search Results */}
-          <div className="search-results-container">
+          <div className={`search-results-container ${isClosing ? 'closing' : ''}`}>
             {isSearching ? (
               <div className="skeleton-loading">
                 {Array.from({ length: 6 }).map((_, index) => (
@@ -434,27 +460,21 @@ const SearchResultItem = ({
         </div>
         {showActions && (
           <div className="result-actions">
-            {linkCopied ? (
-              <div className="link-copied" title="Link copied!">✓ Link copied!</div>
-            ) : (
-              <>
-                <button
-                  className="action-btn copy-btn"
-                  onClick={handleCopyLink}
-                  title="Copy link"
-                >
-                  <HiOutlineLink size={16} />
-                </button>
-                <button
-                  className="action-btn new-tab-btn"
-                  onClick={handleNewTab}
-                  title="New Tab"
-                >
-                  <HiOutlineExternalLink size={16} />
-                  <span>New Tab</span>
-                </button>
-              </>
-            )}
+            <button
+              className="action-btn copy-btn"
+              onClick={handleCopyLink}
+              title={linkCopied ? "Link copied!" : "Copy link"}
+            >
+              <HiOutlineLink size={16} />
+            </button>
+            <button
+              className="action-btn new-tab-btn"
+              onClick={handleNewTab}
+              title="New Tab"
+            >
+              <HiOutlineExternalLink size={16} />
+              <span>New Tab</span>
+            </button>
           </div>
         )}
       </div>
@@ -482,27 +502,21 @@ const SearchResultItem = ({
         </div>
         {showActions && (
           <div className="result-actions">
-            {linkCopied ? (
-              <div className="link-copied" title="Link copied!">✓ Link copied!</div>
-            ) : (
-              <>
-                <button
-                  className="action-btn copy-btn"
-                  onClick={handleCopyLink}
-                  title="Copy link"
-                >
-                  <HiOutlineLink size={16} />
-                </button>
-                <button
-                  className="action-btn new-tab-btn"
-                  onClick={handleNewTab}
-                  title="New Tab"
-                >
-                  <HiOutlineExternalLink size={16} />
-                  <span>New Tab</span>
-                </button>
-              </>
-            )}
+            <button
+              className="action-btn copy-btn"
+              onClick={handleCopyLink}
+              title={linkCopied ? "Link copied!" : "Copy link"}
+            >
+              <HiOutlineLink size={16} />
+            </button>
+            <button
+              className="action-btn new-tab-btn"
+              onClick={handleNewTab}
+              title="New Tab"
+            >
+              <HiOutlineExternalLink size={16} />
+              <span>New Tab</span>
+            </button>
           </div>
         )}
       </div>
@@ -529,27 +543,21 @@ const SearchResultItem = ({
         </div>
         {showActions && (
           <div className="result-actions">
-            {linkCopied ? (
-              <div className="link-copied" title="Link copied!">✓ Link copied!</div>
-            ) : (
-              <>
-                <button
-                  className="action-btn copy-btn"
-                  onClick={handleCopyLink}
-                  title="Copy link"
-                >
-                  <HiOutlineLink size={16} />
-                </button>
-                <button
-                  className="action-btn new-tab-btn"
-                  onClick={handleNewTab}
-                  title="New Tab"
-                >
-                  <HiOutlineExternalLink size={16} />
-                  <span>New Tab</span>
-                </button>
-              </>
-            )}
+            <button
+              className="action-btn copy-btn"
+              onClick={handleCopyLink}
+              title={linkCopied ? "Link copied!" : "Copy link"}
+            >
+              <HiOutlineLink size={16} />
+            </button>
+            <button
+              className="action-btn new-tab-btn"
+              onClick={handleNewTab}
+              title="New Tab"
+            >
+              <HiOutlineExternalLink size={16} />
+              <span>New Tab</span>
+            </button>
           </div>
         )}
       </div>
@@ -576,27 +584,21 @@ const SearchResultItem = ({
         </div>
         {showActions && (
           <div className="result-actions">
-            {linkCopied ? (
-              <div className="link-copied" title="Link copied!">✓ Link copied!</div>
-            ) : (
-              <>
-                <button
-                  className="action-btn copy-btn"
-                  onClick={handleCopyLink}
-                  title="Copy link"
-                >
-                  <HiOutlineLink size={16} />
-                </button>
-                <button
-                  className="action-btn new-tab-btn"
-                  onClick={handleNewTab}
-                  title="New Tab"
-                >
-                  <HiOutlineExternalLink size={16} />
-                  <span>New Tab</span>
-                </button>
-              </>
-            )}
+            <button
+              className="action-btn copy-btn"
+              onClick={handleCopyLink}
+              title={linkCopied ? "Link copied!" : "Copy link"}
+            >
+              <HiOutlineLink size={16} />
+            </button>
+            <button
+              className="action-btn new-tab-btn"
+              onClick={handleNewTab}
+              title="New Tab"
+            >
+              <HiOutlineExternalLink size={16} />
+              <span>New Tab</span>
+            </button>
           </div>
         )}
       </div>
