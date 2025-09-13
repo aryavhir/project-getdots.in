@@ -1,13 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import { IoSearch } from "react-icons/io5";
-import {
-  BsFileEarmark,
-  BsPerson,
-  BsFolder,
-  BsPlay,
-  BsChat,
-  BsList,
-} from "react-icons/bs";
 import { HiOutlineExternalLink, HiOutlineLink } from "react-icons/hi";
 import searchData from "../data/searchData.json";
 import "./SearchInterface.css";
@@ -119,11 +111,11 @@ const SearchInterface = () => {
     if (closingTimeoutRef.current) {
       clearTimeout(closingTimeoutRef.current);
     }
-    
+
     // Start closing animation
     setIsClosing(true);
     setIsSearching(false);
-    
+
     // After animation completes, clear all states
     closingTimeoutRef.current = setTimeout(() => {
       setSearchQuery("");
@@ -135,13 +127,13 @@ const SearchInterface = () => {
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    
+
     // Cancel closing animation if user starts typing
     if (value.length > 0 && closingTimeoutRef.current) {
       clearTimeout(closingTimeoutRef.current);
       setIsClosing(false);
     }
-    
+
     setSearchQuery(value);
 
     // Clear any existing loading timeout
@@ -268,116 +260,120 @@ const SearchInterface = () => {
             </button>
           </div>
 
-          {/* Tabs and Settings */}
-          <div className="search-tabs">
-            <div className="tabs">
-              {["All", "Files", "People", "Chats"]
-                .filter((tab) => {
-                  // Hide tabs when their corresponding filter is disabled
-                  if (tab === "Files" && !filters.Files) return false;
-                  if (tab === "People" && !filters.People) return false;
-                  if (tab === "Chats" && !filters.Chats) return false;
-                  return true;
-                })
-                .map((tab) => {
-                  const counts = getTabCounts();
-                  const count = counts[tab as keyof typeof counts];
-                  return (
-                    <button
-                      key={tab}
-                      className={`tab ${activeTab === tab ? "active" : ""}`}
-                      onClick={() => setActiveTab(tab)}
-                    >
-                      {tab === "Files" && (
-                        <BsFileEarmark className="tab-icon" />
-                      )}
-                      {tab === "People" && <BsPerson className="tab-icon" />}
-                      {tab === "Chats" && <BsChat className="tab-icon" />}
-                      {tab} <span className="count">{count}</span>
-                    </button>
-                  );
-                })}
-            </div>
-
-            <div className="settings-container">
-              <button
-                className={`settings-button ${showFilters ? "active" : ""} ${settingsClicked ? "clicked" : ""}`}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowFilters(!showFilters);
-                  setSettingsClicked(true);
-                  setTimeout(() => setSettingsClicked(false), 300);
-                }}
-              >
-                <img
-                  src="/setting.svg"
-                  alt="Settings"
-                  width="16"
-                  height="16"
-                />
-              </button>
-
-              {showFilters && (
-                <div
-                  className="filter-dropdown"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <div className="filter-item">
-                    <BsFileEarmark className="filter-icon" />
-                    <span>Files</span>
-                    <label className="toggle">
-                      <input
-                        type="checkbox"
-                        checked={filters.Files}
-                        onChange={() => toggleFilter("Files")}
-                      />
-                      <span className="slider"></span>
-                    </label>
-                  </div>
-                  <div className="filter-item">
-                    <BsPerson className="filter-icon" />
-                    <span>People</span>
-                    <label className="toggle">
-                      <input
-                        type="checkbox"
-                        checked={filters.People}
-                        onChange={() => toggleFilter("People")}
-                      />
-                      <span className="slider"></span>
-                    </label>
-                  </div>
-                  <div className="filter-item">
-                    <BsChat className="filter-icon" />
-                    <span>Chats</span>
-                    <label className="toggle">
-                      <input
-                        type="checkbox"
-                        checked={filters.Chats}
-                        onChange={() => toggleFilter("Chats")}
-                      />
-                      <span className="slider"></span>
-                    </label>
-                  </div>
-                  <div className="filter-item disabled">
-                    <BsList className="filter-icon" />
-                    <span>Lists</span>
-                    <label className="toggle disabled">
-                      <input
-                        type="checkbox"
-                        checked={filters.Lists}
-                        onChange={() => toggleFilter("Lists")}
-                        disabled
-                      />
-                      <span className="slider"></span>
-                    </label>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-
           {/* Search Results */}
-          <div className={`search-results-container ${isClosing ? 'closing' : ''}`}>
+          <div
+            className={`search-results-container ${isClosing ? "closing" : ""}`}
+          >
+            {/* Tabs and Settings */}
+            <div className="search-tabs">
+              <div className="tabs">
+                {["All", "Files", "People", "Chats"]
+                  .filter((tab) => {
+                    // Hide tabs when their corresponding filter is disabled
+                    if (tab === "Files" && !filters.Files) return false;
+                    if (tab === "People" && !filters.People) return false;
+                    if (tab === "Chats" && !filters.Chats) return false;
+                    return true;
+                  })
+                  .map((tab) => {
+                    const counts = getTabCounts();
+                    const count = counts[tab as keyof typeof counts];
+                    return (
+                      <button
+                        key={tab}
+                        className={`tab ${activeTab === tab ? "active" : ""}`}
+                        onClick={() => setActiveTab(tab)}
+                      >
+                        {tab === "Files" && (
+                          <img src="/file.svg" className="tab-icon" alt="Files" />
+                        )}
+                        {tab === "People" && <img src="/people.svg" className="tab-icon" alt="People" />}
+                        {tab === "Chats" && <img src="/vid.svg" className="tab-icon" alt="Chats" />}
+                        {tab} <span className="count">{count}</span>
+                      </button>
+                    );
+                  })}
+              </div>
+
+              <div className="settings-container">
+                <button
+                  className={`settings-button ${showFilters ? "active" : ""} ${settingsClicked ? "clicked" : ""}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowFilters(!showFilters);
+                    // Delay rotation by 100ms after press
+                    setTimeout(() => {
+                      setSettingsClicked(true);
+                      setTimeout(() => setSettingsClicked(false), 300);
+                    }, 100);
+                  }}
+                >
+                  <img
+                    src="/setting-1.svg"
+                    alt="Settings"
+                    width="16"
+                    height="16"
+                  />
+                </button>
+
+                {showFilters && (
+                  <div
+                    className="filter-dropdown"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <div className="filter-item">
+                      <img src="/file.svg" className="filter-icon" alt="Files" />
+                      <span>Files</span>
+                      <label className="toggle">
+                        <input
+                          type="checkbox"
+                          checked={filters.Files}
+                          onChange={() => toggleFilter("Files")}
+                        />
+                        <span className="slider"></span>
+                      </label>
+                    </div>
+                    <div className="filter-item">
+                      <img src="/people.svg" className="filter-icon" alt="People" />
+                      <span>People</span>
+                      <label className="toggle">
+                        <input
+                          type="checkbox"
+                          checked={filters.People}
+                          onChange={() => toggleFilter("People")}
+                        />
+                        <span className="slider"></span>
+                      </label>
+                    </div>
+                    <div className="filter-item">
+                      <img src="/vid.svg" className="filter-icon" alt="Chats" />
+                      <span>Chats</span>
+                      <label className="toggle">
+                        <input
+                          type="checkbox"
+                          checked={filters.Chats}
+                          onChange={() => toggleFilter("Chats")}
+                        />
+                        <span className="slider"></span>
+                      </label>
+                    </div>
+                    <div className="filter-item disabled">
+                      <img src="/file.svg" className="filter-icon" alt="Lists" />
+                      <span>Lists</span>
+                      <label className="toggle disabled">
+                        <input
+                          type="checkbox"
+                          checked={filters.Lists}
+                          onChange={() => toggleFilter("Lists")}
+                          disabled
+                        />
+                        <span className="slider"></span>
+                      </label>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
             {isSearching ? (
               <div className="skeleton-loading">
                 {Array.from({ length: 6 }).map((_, index) => (
@@ -489,7 +485,7 @@ const SearchResultItem = ({
         onMouseLeave={() => setShowActions(false)}
       >
         <div className="result-icon">
-          <BsFolder />
+          <img src="/folder.svg" alt="Folder" />
         </div>
         <div className="result-content">
           <h3 className="result-name">
@@ -531,7 +527,7 @@ const SearchResultItem = ({
         onMouseLeave={() => setShowActions(false)}
       >
         <div className="result-icon image-icon">
-          <BsFileEarmark />
+          <img src="/jpg.svg" alt="Image" />
         </div>
         <div className="result-content">
           <h3 className="result-name">
@@ -572,7 +568,7 @@ const SearchResultItem = ({
         onMouseLeave={() => setShowActions(false)}
       >
         <div className="result-icon video-icon">
-          <BsPlay />
+          <img src="/vid.svg" alt="Video" />
         </div>
         <div className="result-content">
           <h3 className="result-name">

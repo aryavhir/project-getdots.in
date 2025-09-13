@@ -135,13 +135,15 @@
   display: flex;
   align-items: center;
   background: white;
-  border-radius: 50px;
+  border-radius: 50px 50px 0 0;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
   padding: 20px 32px;
   transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   width: 100%;
   box-sizing: border-box;
-  margin-bottom: 24px;
+  margin-bottom: 0;
+  position: relative;
+  z-index: 2;
 }
 
 .expanded-search-wrapper .search-icon {
@@ -186,41 +188,26 @@
 .search-results-container {
   width: 100%;
   background: white;
-  border-radius: 24px;
+  border-radius: 0 0 24px 24px;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
   overflow: hidden;
-  animation: slideUp 0.3s ease;
+  animation: slideDown 0.3s ease;
   overflow-y: auto;
-  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  z-index: 1;
 }
 
-.search-results-container.closing {
-  opacity: 0;
-  transform: translateY(-20px) scale(0.95);
-  animation: slideDown 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-
-@keyframes slideUp {
+@keyframes slideDown {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(-10px);
+    max-height: 0;
   }
 
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-
-  to {
-    opacity: 0;
-    transform: translateY(-20px) scale(0.95);
+    max-height: 600px;
   }
 }
 
@@ -281,7 +268,8 @@
 }
 
 .tab-icon {
-  font-size: 14px;
+  width: 14px;
+  height: 14px;
 }
 
 .count {
@@ -325,6 +313,15 @@
 
 .settings-button.active {
   color: #1f2937;
+}
+
+/* Settings Gear Rotation */
+.settings-button img {
+  transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.settings-button.clicked img {
+  transform: rotate(180deg);
 }
 
 /* Filter Dropdown */
@@ -372,8 +369,8 @@
 }
 
 .filter-icon {
-  font-size: 14px;
-  color: #6b7280;
+  width: 14px;
+  height: 14px;
   flex-shrink: 0;
 }
 
@@ -629,6 +626,11 @@ input:checked+.slider:before {
   font-size: 20px;
 }
 
+.result-icon img {
+  width: 24px;
+  height: 24px;
+}
+
 .result-icon {
   background: #f3f4f6;
   color: #6b7280;
@@ -809,14 +811,4 @@ input:checked+.slider:before {
   background: #dbeafe;
   color: #1d4ed8;
   transform: scale(1.05);
-}
-
-
-/* Settings Gear Animation */
-.settings-button {
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.settings-button.clicked {
-  transform: rotate(45deg);
 }
