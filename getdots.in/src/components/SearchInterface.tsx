@@ -224,43 +224,34 @@ const SearchInterface = () => {
 
   return (
     <div className={`search-interface ${showResults ? "expanded" : "compact"}`}>
-      {!showResults ? (
-        // Compact initial state
-        <div className="compact-search-container">
-          <div className="compact-search-wrapper">
-            <IoSearch className="search-icon" />
-            <input
-              type="text"
-              placeholder="Searching is easier"
-              value={searchQuery}
-              onChange={handleSearchChange}
-              className="search-input"
-            />
+      <div className="search-container">
+        {/* Single Search Input that transforms */}
+        <div className={`search-wrapper ${showResults ? "expanded" : "compact"}`}>
+          <IoSearch className="search-icon" />
+          <input
+            type="text"
+            placeholder={showResults ? "Search..." : "Searching is easier"}
+            value={searchQuery}
+            onChange={handleSearchChange}
+            className="search-input"
+            autoFocus={showResults}
+          />
+          
+          {/* Show quick access in compact mode, clear button in expanded mode */}
+          {!showResults ? (
             <div className="quick-access">
               <span className="shortcut-key">S</span>
               <span className="shortcut-text">quick access</span>
             </div>
-          </div>
-        </div>
-      ) : (
-        // Expanded state with full interface
-        <div className="expanded-search-container">
-          <div className="expanded-search-wrapper">
-            <IoSearch className="search-icon" />
-            <input
-              type="text"
-              placeholder="Search..."
-              value={searchQuery}
-              onChange={handleSearchChange}
-              className="search-input"
-              autoFocus
-            />
+          ) : (
             <button onClick={clearSearch} className="clear-button">
               Clear
             </button>
-          </div>
+          )}
+        </div>
 
-          {/* Search Results */}
+        {/* Search Results - only shown when typing */}
+        {showResults && (
           <div
             className={`search-results-container ${isClosing ? "closing" : ""}`}
           >
@@ -408,8 +399,8 @@ const SearchInterface = () => {
               </div>
             )}
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
