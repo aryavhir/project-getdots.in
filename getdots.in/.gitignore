@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Replit files (keep local, don't commit)
+.replit
+replit.nix
+replit.md
