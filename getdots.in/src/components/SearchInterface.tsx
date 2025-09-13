@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { IoSearch, IoSettings } from 'react-icons/io5'
-import { BsFileEarmark, BsPerson, BsChat, BsList, BsFolder, BsPlay } from 'react-icons/bs'
+import { IoSearch } from 'react-icons/io5'
+import { BsFileEarmark, BsPerson, BsFolder, BsPlay } from 'react-icons/bs'
 import searchData from '../data/searchData.json'
 import './SearchInterface.css'
 
@@ -13,15 +13,7 @@ interface SearchResult {
 
 const SearchInterface = () => {
   const [searchQuery, setSearchQuery] = useState('')
-  const [activeTab, setActiveTab] = useState('All')
-  const [showFilters, setShowFilters] = useState(false)
-  const [isExpanded, setIsExpanded] = useState(false)
-  const [filters, setFilters] = useState({
-    Files: true,
-    People: true,
-    Chats: false,
-    Lists: false
-  })
+  const [showResults, setShowResults] = useState(false)
 
   const allResults = [
     ...searchData.people,
@@ -30,91 +22,28 @@ const SearchInterface = () => {
   ]
 
   const getFilteredResults = () => {
-    let results = allResults
+    if (!searchQuery) return []
     
-    // Apply search query filter (always applied)
-    if (searchQuery) {
-      results = results.filter(item => 
-        item.name.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    }
-
-    // Apply tab filter or toggle filters
-    if (activeTab === 'All') {
-      // On "All" tab: apply toggle filters
-      if (!filters.Files) {
-        results = results.filter(item => item.type !== 'image' && item.type !== 'video' && item.type !== 'folder')
-      }
-      if (!filters.People) {
-        results = results.filter(item => item.type !== 'person')
-      }
-    } else {
-      // On specific tabs: apply tab filter (ignore toggles)
-      if (activeTab === 'Files') {
-        results = results.filter(item => item.type === 'image' || item.type === 'video' || item.type === 'folder')
-      } else if (activeTab === 'People') {
-        results = results.filter(item => item.type === 'person')
-      }
-    }
-
-    return results
-  }
-
-  const getTabCounts = () => {
-    let results = allResults
-    
-    // Apply search query filter
-    if (searchQuery) {
-      results = results.filter(item => 
-        item.name.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    }
-
-    // Calculate "All" count with toggle filters (always applied for All count)
-    let allFilteredResults = results
-    if (!filters.Files) {
-      allFilteredResults = allFilteredResults.filter(item => item.type !== 'image' && item.type !== 'video' && item.type !== 'folder')
-    }
-    if (!filters.People) {
-      allFilteredResults = allFilteredResults.filter(item => item.type !== 'person')
-    }
-    
-    return {
-      All: allFilteredResults.length,
-      Files: results.filter(item => item.type !== 'person').length,
-      People: results.filter(item => item.type === 'person').length
-    }
+    return allResults.filter(item => 
+      item.name.toLowerCase().includes(searchQuery.toLowerCase())
+    )
   }
 
   const clearSearch = () => {
     setSearchQuery('')
-    setIsExpanded(false)
-    setShowFilters(false)
-  }
-
-  const handleSearchFocus = () => {
-    setIsExpanded(true)
+    setShowResults(false)
   }
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
     setSearchQuery(value)
-    if (value && !isExpanded) {
-      setIsExpanded(true)
-    }
+    setShowResults(value.length > 0)
   }
 
-  const toggleFilter = (filterName: string) => {
-    setFilters(prev => ({
-      ...prev,
-      [filterName]: !prev[filterName as keyof typeof prev]
-    }))
-  }
-
-  if (!isExpanded) {
-    // Compact initial state
-    return (
-      <div className="search-interface compact">
+  return (
+    <div className={`search-interface ${showResults ? 'expanded' : 'compact'}`}>
+      {!showResults ? (
+        // Compact initial state
         <div className="compact-search-container">
           <div className="compact-search-wrapper">
             <IoSearch className="search-icon" />
@@ -123,7 +52,6 @@ const SearchInterface = () => {
               placeholder="Searching is easier"
               value={searchQuery}
               onChange={handleSearchChange}
-              onFocus={handleSearchFocus}
               className="search-input"
             />
             <div className="quick-access">
@@ -132,101 +60,35 @@ const SearchInterface = () => {
             </div>
           </div>
         </div>
-      </div>
-    )
-  }
-
-  // Expanded state - full interface
-  return (
-    <div className="search-interface expanded">
-      <div className="search-container">
-        <div className="search-input-wrapper">
-          <IoSearch className="search-icon" />
-          <input
-            type="text"
-            placeholder="Search..."
-            value={searchQuery}
-            onChange={handleSearchChange}
-            className="search-input"
-            autoFocus
-          />
-          {searchQuery && (
+      ) : (
+        // Expanded state - search with results
+        <div className="expanded-search-container">
+          <div className="expanded-search-wrapper">
+            <IoSearch className="search-icon" />
+            <input
+              type="text"
+              placeholder="Search..."
+              value={searchQuery}
+              onChange={handleSearchChange}
+              className="search-input"
+              autoFocus
+            />
             <button onClick={clearSearch} className="clear-button">
               Clear
             </button>
-          )}
-        </div>
-        
-        <div className="search-controls">
-          <div className="tab-navigation">
-            {(['All', 'Files', 'People'] as const).map(tab => {
-              const count = getTabCounts()[tab]
-              return (
-                <button
-                  key={tab}
-                  className={`tab ${activeTab === tab ? 'active' : ''}`}
-                  onClick={() => setActiveTab(tab)}
-                >
-                  {tab === 'Files' && <BsFileEarmark className="tab-icon" />}
-                  {tab === 'People' && <BsPerson className="tab-icon" />}
-                  {tab} 
-                  <span className="tab-count">{count}</span>
-                </button>
-              )
-            })}
           </div>
           
-          <div className="settings-wrapper">
-            <button 
-              className="settings-button"
-              onClick={() => setShowFilters(!showFilters)}
-            >
-              <IoSettings />
-            </button>
-            
-            {showFilters && (
-              <div className="filter-dropdown">
-                <div className="filter-item">
-                  <BsFileEarmark className="filter-icon" />
-                  <span>Files</span>
-                  <div className={`toggle ${filters.Files ? 'active' : ''}`} 
-                       onClick={() => toggleFilter('Files')}>
-                    <div className="toggle-thumb"></div>
-                  </div>
-                </div>
-                <div className="filter-item">
-                  <BsPerson className="filter-icon" />
-                  <span>People</span> 
-                  <div className={`toggle ${filters.People ? 'active' : ''}`}
-                       onClick={() => toggleFilter('People')}>
-                    <div className="toggle-thumb"></div>
-                  </div>
-                </div>
-                <div className="filter-item disabled">
-                  <BsChat className="filter-icon" />
-                  <span>Chats</span>
-                  <div className={`toggle ${filters.Chats ? 'active' : ''}`}>
-                    <div className="toggle-thumb"></div>
-                  </div>
-                </div>
-                <div className="filter-item disabled">
-                  <BsList className="filter-icon" />
-                  <span>Lists</span>
-                  <div className={`toggle ${filters.Lists ? 'active' : ''}`}>
-                    <div className="toggle-thumb"></div>
-                  </div>
-                </div>
+          {getFilteredResults().length > 0 && (
+            <div className="search-results-container">
+              <div className="search-results">
+                {getFilteredResults().map(result => (
+                  <SearchResultItem key={result.id} result={result} />
+                ))}
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
-        
-        <div className="search-results">
-          {getFilteredResults().map(result => (
-            <SearchResultItem key={result.id} result={result} />
-          ))}
-        </div>
-      </div>
+      )}
     </div>
   )
 }
