@@ -76,6 +76,7 @@
   align-items: stretch;
   flex-direction: column;
   padding-bottom: 32px;
+  margin-bottom: 40px;
 }
 
 /* Compact state styling */
@@ -477,7 +478,7 @@ input:checked+.slider:before {
   width: 48px;
   height: 48px;
   background: #e5e7eb;
-  border-radius: 50%;
+  border-radius: 20%;
   flex-shrink: 0;
 }
 
@@ -790,9 +791,8 @@ input:checked+.slider:before {
 .copy-btn {
   min-width: 35px !important;
   padding: 6px !important;
-  border-radius: 50% !important;
+  border-radius: 20% !important;
   background: #f3f4f6 !important;
-  border: 1px solid #d1d5db !important;
   justify-content: center !important;
 }
 
