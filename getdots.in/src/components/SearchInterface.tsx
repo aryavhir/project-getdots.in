@@ -227,179 +227,182 @@ const SearchInterface = () => {
       <div className="search-container">
         {/* Single Search Input that transforms */}
         <div className={`search-wrapper ${showResults ? "expanded" : "compact"}`}>
-          <IoSearch className="search-icon" />
-          <input
-            type="text"
-            placeholder={showResults ? "Search..." : "Searching is easier"}
-            value={searchQuery}
-            onChange={handleSearchChange}
-            className="search-input"
-            autoFocus={showResults}
-          />
-          
-          {/* Show quick access in compact mode, clear button in expanded mode */}
-          {!showResults ? (
-            <div className="quick-access">
-              <span className="shortcut-key">S</span>
-              <span className="shortcut-text">quick access</span>
-            </div>
-          ) : (
-            <button onClick={clearSearch} className="clear-button">
-              Clear
-            </button>
-          )}
-        </div>
-
-        {/* Search Results - only shown when typing */}
-        {showResults && (
-          <div
-            className={`search-results-container ${isClosing ? "closing" : ""}`}
-          >
-            {/* Tabs and Settings */}
-            <div className="search-tabs">
-              <div className="tabs">
-                {["All", "Files", "People", "Chats"]
-                  .filter((tab) => {
-                    // Hide tabs when their corresponding filter is disabled
-                    if (tab === "Files" && !filters.Files) return false;
-                    if (tab === "People" && !filters.People) return false;
-                    if (tab === "Chats" && !filters.Chats) return false;
-                    return true;
-                  })
-                  .map((tab) => {
-                    const counts = getTabCounts();
-                    const count = counts[tab as keyof typeof counts];
-                    return (
-                      <button
-                        key={tab}
-                        className={`tab ${activeTab === tab ? "active" : ""}`}
-                        onClick={() => setActiveTab(tab)}
-                      >
-                        {tab === "Files" && (
-                          <img src="/file.svg" className="tab-icon" alt="Files" />
-                        )}
-                        {tab === "People" && <img src="/people.svg" className="tab-icon" alt="People" />}
-                        {tab === "Chats" && <img src="/vid.svg" className="tab-icon" alt="Chats" />}
-                        {tab} <span className="count">{count}</span>
-                      </button>
-                    );
-                  })}
-              </div>
-
-              <div className="settings-container">
-                <button
-                  className={`settings-button ${showFilters ? "active" : ""} ${settingsClicked ? "clicked" : ""}`}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setShowFilters(!showFilters);
-                    // Delay rotation by 100ms after press
-                    setTimeout(() => {
-                      setSettingsClicked(true);
-                      setTimeout(() => setSettingsClicked(false), 300);
-                    }, 100);
-                  }}
-                >
-                  <img
-                    src="/setting-1.svg"
-                    alt="Settings"
-                    width="16"
-                    height="16"
-                  />
-                </button>
-
-                {showFilters && (
-                  <div
-                    className="filter-dropdown"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <div className="filter-item">
-                      <img src="/file.svg" className="filter-icon" alt="Files" />
-                      <span>Files</span>
-                      <label className="toggle">
-                        <input
-                          type="checkbox"
-                          checked={filters.Files}
-                          onChange={() => toggleFilter("Files")}
-                        />
-                        <span className="slider"></span>
-                      </label>
-                    </div>
-                    <div className="filter-item">
-                      <img src="/people.svg" className="filter-icon" alt="People" />
-                      <span>People</span>
-                      <label className="toggle">
-                        <input
-                          type="checkbox"
-                          checked={filters.People}
-                          onChange={() => toggleFilter("People")}
-                        />
-                        <span className="slider"></span>
-                      </label>
-                    </div>
-                    <div className="filter-item">
-                      <img src="/vid.svg" className="filter-icon" alt="Chats" />
-                      <span>Chats</span>
-                      <label className="toggle">
-                        <input
-                          type="checkbox"
-                          checked={filters.Chats}
-                          onChange={() => toggleFilter("Chats")}
-                        />
-                        <span className="slider"></span>
-                      </label>
-                    </div>
-                    <div className="filter-item disabled">
-                      <img src="/file.svg" className="filter-icon" alt="Lists" />
-                      <span>Lists</span>
-                      <label className="toggle disabled">
-                        <input
-                          type="checkbox"
-                          checked={filters.Lists}
-                          onChange={() => toggleFilter("Lists")}
-                          disabled
-                        />
-                        <span className="slider"></span>
-                      </label>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-            {isSearching ? (
-              <div className="skeleton-loading">
-                {Array.from({ length: 6 }).map((_, index) => (
-                  <div key={index} className="skeleton-item">
-                    <div className="skeleton-avatar"></div>
-                    <div className="skeleton-content">
-                      <div className="skeleton-title"></div>
-                      <div className="skeleton-subtitle"></div>
-                    </div>
-                  </div>
-                ))}
+          {/* Search Input Row */}
+          <div className="search-input-row">
+            <IoSearch className="search-icon" />
+            <input
+              type="text"
+              placeholder={showResults ? "Search..." : "Searching is easier"}
+              value={searchQuery}
+              onChange={handleSearchChange}
+              className="search-input"
+              autoFocus={showResults}
+            />
+            
+            {/* Show quick access in compact mode, clear button in expanded mode */}
+            {!showResults ? (
+              <div className="quick-access">
+                <span className="shortcut-key">S</span>
+                <span className="shortcut-text">quick access</span>
               </div>
             ) : (
-              <div className="search-results">
-                {getFilteredResults().length === 0 ? (
-                  <div className="no-results">
-                    <div className="no-results-text">No results found</div>
-                    <div className="no-results-subtitle">
-                      Try adjusting your search or filters
-                    </div>
-                  </div>
-                ) : (
-                  getFilteredResults().map((result) => (
-                    <SearchResultItem
-                      key={result.id}
-                      result={result}
-                      searchQuery={searchQuery}
-                      highlightText={highlightText}
-                    />
-                  ))
-                )}
-              </div>
+              <button onClick={clearSearch} className="clear-button">
+                Clear
+              </button>
             )}
           </div>
-        )}
+
+          {/* Expanded Content - only shown when typing */}
+          {showResults && (
+            <div
+              className={`search-results-container ${isClosing ? "closing" : ""}`}
+            >
+              {/* Tabs and Settings */}
+              <div className="search-tabs">
+                <div className="tabs">
+                  {["All", "Files", "People", "Chats"]
+                    .filter((tab) => {
+                      // Hide tabs when their corresponding filter is disabled
+                      if (tab === "Files" && !filters.Files) return false;
+                      if (tab === "People" && !filters.People) return false;
+                      if (tab === "Chats" && !filters.Chats) return false;
+                      return true;
+                    })
+                    .map((tab) => {
+                      const counts = getTabCounts();
+                      const count = counts[tab as keyof typeof counts];
+                      return (
+                        <button
+                          key={tab}
+                          className={`tab ${activeTab === tab ? "active" : ""}`}
+                          onClick={() => setActiveTab(tab)}
+                        >
+                          {tab === "Files" && (
+                            <img src="/file.svg" className="tab-icon" alt="Files" />
+                          )}
+                          {tab === "People" && <img src="/people.svg" className="tab-icon" alt="People" />}
+                          {tab === "Chats" && <img src="/vid.svg" className="tab-icon" alt="Chats" />}
+                          {tab} <span className="count">{count}</span>
+                        </button>
+                      );
+                    })}
+                </div>
+
+                <div className="settings-container">
+                  <button
+                    className={`settings-button ${showFilters ? "active" : ""} ${settingsClicked ? "clicked" : ""}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShowFilters(!showFilters);
+                      // Delay rotation by 100ms after press
+                      setTimeout(() => {
+                        setSettingsClicked(true);
+                        setTimeout(() => setSettingsClicked(false), 300);
+                      }, 100);
+                    }}
+                  >
+                    <img
+                      src="/setting-1.svg"
+                      alt="Settings"
+                      width="16"
+                      height="16"
+                    />
+                  </button>
+
+                  {showFilters && (
+                    <div
+                      className="filter-dropdown"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <div className="filter-item">
+                        <img src="/file.svg" className="filter-icon" alt="Files" />
+                        <span>Files</span>
+                        <label className="toggle">
+                          <input
+                            type="checkbox"
+                            checked={filters.Files}
+                            onChange={() => toggleFilter("Files")}
+                          />
+                          <span className="slider"></span>
+                        </label>
+                      </div>
+                      <div className="filter-item">
+                        <img src="/people.svg" className="filter-icon" alt="People" />
+                        <span>People</span>
+                        <label className="toggle">
+                          <input
+                            type="checkbox"
+                            checked={filters.People}
+                            onChange={() => toggleFilter("People")}
+                          />
+                          <span className="slider"></span>
+                        </label>
+                      </div>
+                      <div className="filter-item">
+                        <img src="/vid.svg" className="filter-icon" alt="Chats" />
+                        <span>Chats</span>
+                        <label className="toggle">
+                          <input
+                            type="checkbox"
+                            checked={filters.Chats}
+                            onChange={() => toggleFilter("Chats")}
+                          />
+                          <span className="slider"></span>
+                        </label>
+                      </div>
+                      <div className="filter-item disabled">
+                        <img src="/file.svg" className="filter-icon" alt="Lists" />
+                        <span>Lists</span>
+                        <label className="toggle disabled">
+                          <input
+                            type="checkbox"
+                            checked={filters.Lists}
+                            onChange={() => toggleFilter("Lists")}
+                            disabled
+                          />
+                          <span className="slider"></span>
+                        </label>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+              {isSearching ? (
+                <div className="skeleton-loading">
+                  {Array.from({ length: 6 }).map((_, index) => (
+                    <div key={index} className="skeleton-item">
+                      <div className="skeleton-avatar"></div>
+                      <div className="skeleton-content">
+                        <div className="skeleton-title"></div>
+                        <div className="skeleton-subtitle"></div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="search-results">
+                  {getFilteredResults().length === 0 ? (
+                    <div className="no-results">
+                      <div className="no-results-text">No results found</div>
+                      <div className="no-results-subtitle">
+                        Try adjusting your search or filters
+                      </div>
+                    </div>
+                  ) : (
+                    getFilteredResults().map((result) => (
+                      <SearchResultItem
+                        key={result.id}
+                        result={result}
+                        searchQuery={searchQuery}
+                        highlightText={highlightText}
+                      />
+                    ))
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

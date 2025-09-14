@@ -57,7 +57,6 @@
 /* Search Wrapper - transitions between compact and expanded */
 .search-wrapper {
   display: flex;
-  align-items: center;
   background: white;
   padding: 20px 32px;
   transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -65,6 +64,19 @@
   box-sizing: border-box;
   position: relative;
   z-index: 2;
+}
+
+/* Compact: horizontal layout for search input */
+.search-wrapper.compact {
+  align-items: center;
+  flex-direction: row;
+}
+
+/* Expanded: vertical layout to stack input row and results */
+.search-wrapper.expanded {
+  align-items: stretch;
+  flex-direction: column;
+  padding-bottom: 32px;
 }
 
 /* Compact state styling */
@@ -78,19 +90,25 @@
   transform: translateY(-2px);
 }
 
-/* Expanded state styling - keep same appearance, just change connection */
+/* Expanded state styling - seamless container, no border separation */
 .search-wrapper.expanded {
-  border-radius: 20px 20px 0 0;
+  border-radius: 20px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-  border-bottom: 1px solid #f3f4f6;
 }
 
 .search-wrapper.expanded:hover {
   transform: none;
 }
 
+/* Search Input Row - contains icon, input, and buttons */
+.search-input-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
 /* Search icon styling - identical for both states */
-.search-wrapper .search-icon {
+.search-input-row .search-icon {
   color: #9ca3af;
   font-size: 26px;
   margin-right: 16px;
@@ -98,7 +116,7 @@
 }
 
 /* Search input styling - identical for both states */
-.search-wrapper .search-input {
+.search-input-row .search-input {
   flex: 1;
   border: none;
   outline: none;
@@ -108,7 +126,7 @@
   min-width: 0;
 }
 
-.search-wrapper .search-input::placeholder {
+.search-input-row .search-input::placeholder {
   color: #9ca3af;
   font-weight: 400;
 }
@@ -162,18 +180,14 @@
   color: #374151;
 }
 
-/* Search Results Container */
+/* Search Results Container - now inside search-wrapper */
 .search-results-container {
   width: 100%;
-  background: white;
-  border-radius: 0 0 24px 24px;
-  box-shadow: 0px 0px 32px 11px rgba(0, 0, 0, 0.17);
+  background: transparent;
   overflow: hidden;
   animation: slideDown 1.2s cubic-bezier(0.4, 0, 0.2, 1);
   overflow-y: auto;
-  position: relative;
-  z-index: 1;
-  margin-top: 0;
+  margin-top: 20px;
   transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
