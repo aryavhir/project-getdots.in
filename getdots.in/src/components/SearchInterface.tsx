@@ -18,6 +18,7 @@ const SearchInterface = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const [filters, setFilters] = useState({
     Files: true,
     People: true,
@@ -27,6 +28,7 @@ const SearchInterface = () => {
 
   const loadingTimeoutRef = useRef<number | null>(null);
   const closingTimeoutRef = useRef<number | null>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   const allResults = [
     ...searchData.people,
@@ -209,6 +211,28 @@ const SearchInterface = () => {
     }
   }, [showFilters]);
 
+  // Keyboard accessibility - 's' key to focus search
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Only activate if 's' or 'S' is pressed and not typing in an input/textarea
+      if ((e.key === 's' || e.key === 'S') && 
+          !(e.target instanceof HTMLInputElement) && 
+          !(e.target instanceof HTMLTextAreaElement)) {
+        e.preventDefault();
+        searchInputRef.current?.focus();
+        // If search is not expanded, show it
+        if (!showResults) {
+          setShowResults(true);
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [showResults]);
+
   // Cleanup timeouts on unmount
   useEffect(() => {
     return () => {
@@ -230,6 +254,7 @@ const SearchInterface = () => {
           <div className="search-input-row">
             <IoSearch className="search-icon" />
             <input
+              ref={searchInputRef}
               type="text"
               placeholder={showResults ? "Search..." : "Searching is easier"}
               value={searchQuery}
@@ -274,7 +299,15 @@ const SearchInterface = () => {
                         <button
                           key={tab}
                           className={`tab ${activeTab === tab ? "active" : ""}`}
-                          onClick={() => setActiveTab(tab)}
+                          onClick={() => {
+                            if (activeTab !== tab) {
+                              setIsTransitioning(true);
+                              setTimeout(() => {
+                                setActiveTab(tab);
+                                setTimeout(() => setIsTransitioning(false), 50);
+                              }, 150);
+                            }
+                          }}
                         >
                           {tab === "Files" && (
                             <img src="/file.svg" className="tab-icon" alt="Files" />
@@ -374,7 +407,7 @@ const SearchInterface = () => {
                   ))}
                 </div>
               ) : (
-                <div className="search-results">
+                <div className={`search-results ${isTransitioning ? 'transitioning' : ''}`}>
                   {getFilteredResults().length === 0 ? (
                     <div className="no-results">
                       <div className="no-results-text">No results found</div>
