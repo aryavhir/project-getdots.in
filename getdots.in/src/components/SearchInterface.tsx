@@ -16,7 +16,6 @@ const SearchInterface = () => {
   const [showResults, setShowResults] = useState(false);
   const [activeTab, setActiveTab] = useState("All");
   const [showFilters, setShowFilters] = useState(false);
-  const [settingsClicked, setSettingsClicked] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [filters, setFilters] = useState({
@@ -281,7 +280,7 @@ const SearchInterface = () => {
                             <img src="/file.svg" className="tab-icon" alt="Files" />
                           )}
                           {tab === "People" && <img src="/people.svg" className="tab-icon" alt="People" />}
-                          {tab === "Chats" && <img src="/vid.svg" className="tab-icon" alt="Chats" />}
+                          {tab === "Chats" && <img src="/Image.svg" className="tab-icon" alt="Chats" />}
                           {tab} <span className="count">{count}</span>
                         </button>
                       );
@@ -290,15 +289,10 @@ const SearchInterface = () => {
 
                 <div className="settings-container">
                   <button
-                    className={`settings-button ${showFilters ? "active" : ""} ${settingsClicked ? "clicked" : ""}`}
+                    className={`settings-button ${showFilters ? "active" : ""}`}
                     onClick={(e) => {
                       e.stopPropagation();
                       setShowFilters(!showFilters);
-                      // Delay rotation by 100ms after press
-                      setTimeout(() => {
-                        setSettingsClicked(true);
-                        setTimeout(() => setSettingsClicked(false), 300);
-                      }, 100);
                     }}
                   >
                     <img
@@ -339,7 +333,7 @@ const SearchInterface = () => {
                         </label>
                       </div>
                       <div className="filter-item">
-                        <img src="/vid.svg" className="filter-icon" alt="Chats" />
+                        <img src="/Image.svg" className="filter-icon" alt="Chats" />
                         <span>Chats</span>
                         <label className="toggle">
                           <input
@@ -453,7 +447,7 @@ const SearchResultItem = ({
             <button
               className="action-btn copy-btn"
               onClick={handleCopyLink}
-              title={linkCopied ? "Link copied!" : "Copy link"}
+              data-tooltip={linkCopied ? "Link copied!" : "Copy link"}
             >
               <HiOutlineLink size={16} />
             </button>
@@ -495,7 +489,7 @@ const SearchResultItem = ({
             <button
               className="action-btn copy-btn"
               onClick={handleCopyLink}
-              title={linkCopied ? "Link copied!" : "Copy link"}
+              data-tooltip={linkCopied ? "Link copied!" : "Copy link"}
             >
               <HiOutlineLink size={16} />
             </button>
@@ -536,7 +530,7 @@ const SearchResultItem = ({
             <button
               className="action-btn copy-btn"
               onClick={handleCopyLink}
-              title={linkCopied ? "Link copied!" : "Copy link"}
+              data-tooltip={linkCopied ? "Link copied!" : "Copy link"}
             >
               <HiOutlineLink size={16} />
             </button>
@@ -577,7 +571,7 @@ const SearchResultItem = ({
             <button
               className="action-btn copy-btn"
               onClick={handleCopyLink}
-              title={linkCopied ? "Link copied!" : "Copy link"}
+              data-tooltip={linkCopied ? "Link copied!" : "Copy link"}
             >
               <HiOutlineLink size={16} />
             </button>
