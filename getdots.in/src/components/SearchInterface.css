@@ -121,9 +121,10 @@
   border: none;
   outline: none;
   font-size: 24px;
-  color: #374151;
+  color: black;
   background: transparent;
   min-width: 0;
+  font-weight: 500;
 }
 
 .search-input-row .search-input::placeholder {
